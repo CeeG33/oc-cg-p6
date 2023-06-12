@@ -1,0 +1,55 @@
+body {
+    font-family: Tahoma;
+    
+    color: black
+    
+}
+
+header {
+    background-color: #66FCF1;
+}
+
+header h1, header li {
+    color: #0B0C10
+}
+
+.best-rated-film {
+    height: 200px;
+    width: 632px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.button-carousel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+}
+
+.carousel {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    left: 0;
+    transition: all 1s ease;
+}
+
+.card {
+    background: black;
+    min-width: 200px;
+    height: 200px;
+    margin-right: 1rem;
+    display: inline-block;
+}
+
+.best-film .best-rated-film .crime-category .fantasy-category .mystery-category footer {
+    display: flex;
+    flex-direction: column;
+}
