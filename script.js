@@ -1,6 +1,9 @@
 const urlImdbScore = "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score";
+const urlImdbScore7films = "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score&page_size=7";
 const urlErrorMessage = "Problème dans l'URL fourni ! ";
 const jsonErrorMessage = "Problème dans la conversion en JSON ! ";
+const idLocationErrorMessage = "Problème de la localisation de l'ID dans le code HTML ! ";
+const bestFilmsH1Text = "Films les mieux notés";
 
 // Fonction qui récupère les données d'une URL donnée et les renvoie sous format JSON
 async function getData(url) {
@@ -14,14 +17,68 @@ async function getData(url) {
     return response.json();
 }
 
+/* Fonction qui crée un élément HTML ayant les paramètres suivants :
+idLocationInHtml = ID de la balise dans laquelle on souhaite créer l'élément.
+elementIdToCreate = ID de l'élément à créer.
+content = Contenu de l'élément à créer.
+*/
+async function createHtmlElement(idLocationInHtml, elementIdToCreate, content) {
+    const location = document.getElementById(idLocationInHtml);
+    const element = await document.createElement(elementIdToCreate);
+    element.textContent = content; 
+    if (!location) {
+        throw new Error (idLocationErrorMessage);
+    }
+    location.appendChild(element);
+}
 
+/* Fonction qui crée une balise HTML image ayant les paramètres suivants :
+idLocationInHtml = ID de la balise dans laquelle on souhaite créer l'image.
+imgUrl = URL de l'image.
+imgAlt = Texte alternatif de l'image.
+*/
+async function createHtmlImg(idLocationInHtml, imgUrl, imgAlt) {
+    const location = document.getElementById(idLocationInHtml);
+    const img = document.createElement("img");
+    img.src = imgUrl;
+    img.alt = imgAlt + " Cover Image";
+    
+    if (!location) {
+        throw new Error (idLocationErrorMessage);
+    }
+    location.appendChild(img);
+}
+
+// Récupération et affichage de la data du meilleur film selon sa note IMDb (best film)
 const bestFilmsPromise = getData(urlImdbScore);
 bestFilmsPromise.then(bestFilms => {
-    const firstFilm = bestFilms.results[0];
-    const firstFilmTitle = firstFilm.title
-    console.log(firstFilm);
-    console.log(firstFilmTitle);
-})
+    firstFilm = bestFilms.results[0];
+    firstFilmTitle = firstFilm.title;
+    createHtmlElement("best-film", "h1", firstFilmTitle);
+    createHtmlImg("best-film", firstFilm.image_url, firstFilm.title);
+});
+
+// Début de la même chose mais avec les 7 meilleurs films.
+const best7FilmsPromise = getData(urlImdbScore7films);
+best7FilmsPromise.then(best7Films => {
+    const allFilms = best7Films.results;
+    const h1 = createHtmlElement("best-rated-films", "h1", bestFilmsH1Text);
+    const buttonDiv = createHtmlElement("best-rated-films", "div", "");
+    buttonDiv.class = "button-carousel";
+    const buttonL = createHtmlElement("button-carousel", "button", "L");
+    buttonL.data-action = "slideLeft";
+    const buttonR = createHtmlElement("button-carousel", "button", "R");
+    buttonL.data-action = "slideLeft";
+    buttonR.data-action = "slideRight";
+    
+    const carouselUl = createHtmlElement("best-rated-films", "ul", "");
+
+    console.log(allFilms);
+    for (let film of allFilms) {
+
+    }
+});
+
 
 
 
