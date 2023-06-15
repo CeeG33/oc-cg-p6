@@ -125,7 +125,6 @@ function carousel(sectionId, carouselTitle, data) {
     }
 }
 
-
 // Récupération et affichage de la data du meilleur film selon sa note IMDb (best film)
 const bestFilmsPromise = getData(urlImdbScore);
 bestFilmsPromise.then(bestFilms => {
@@ -157,6 +156,50 @@ const best7FilmsMysteryCategoryCarousel = best7FilmsMysteryCategoryPromise.then(
 // Idem pour la catégorie Sport.
 const best7FilmsSportCategoryPromise = getData(urlImdbScore7filmsSportCategory);
 const best7FilmsSportCategoryCarousel = best7FilmsSportCategoryPromise.then(data => carousel("sport-category", "Sport", data));
+
+let modal = null;
+
+const openModal = function (event) {
+    event.preventDefault();
+    modal = document.querySelector(event.target.getAttribute("href"));
+    modal.style.display = null;
+    modal.removeAttribute("aria-hidden");
+    modal.setAttribute("aria-modal", "true");
+    modal.addEventListener("click", closeModal);
+    modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+    modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+}
+
+const closeModal = function (event) {
+    if (modal === null) return;
+    event.preventDefault();
+    window.setTimeout(function() {
+        modal.style.display = "none";
+        modal = null;
+    }, 500)
+    
+    modal.setAttribute("aria-hidden", "true");
+    modal.removeAttribute("aria-modal");
+    modal.removeEventListener("click", closeModal);
+    modal.querySelector(".js-modal-close").removeEventListener("click", closeModal);
+    modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
+    
+}
+
+const stopPropagation = function (event) {
+    event.stopPropagation()
+}
+
+document.querySelectorAll(".js-modal").forEach(lien => {
+    lien.addEventListener("click", openModal);
+})
+
+window.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" || event.key === "Esc") {
+        closeModal(event);
+    }
+})
+
 
 /*
 
