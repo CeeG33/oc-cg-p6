@@ -120,10 +120,45 @@ function carousel(sectionId, carouselTitle, data) {
     for (let film of dataDetails) {
         const filmCard = createHtmlElementWithDataTarget("li", "", "card", "card");
         const filmImg = createHtmlImg(film.image_url, film.title);
+        const filmUrl = film.url;
         filmCard.appendChild(filmImg);
         carouselUl.appendChild(filmCard);
+        const filmDataPromise = getData(filmUrl);
+        const filmData = filmDataPromise.then(data => {
+            const img = data.image_url;
+            const title = data.title;
+            const genre = data.genres.join(", ");
+            const date = data.date_published;
+            let rated = null;
+            if (data.rated !== "Not rated or unkown rating" || "Not Rated") {
+                rated = data.rated;
+            }
+            const imdb = data.imdb_score;
+            let director = null;
+            if (data.directors.length > 1) {
+                director = data.directors.join(", ");
+            } else {
+                director = data.directors[0];
+            }
+            const actors = data.actors.join(", ");
+            const duration = data.duration + " mins";
+            let countries = null;
+            if (data.countries.length > 1) {
+                countries = data.countries.join(", ");
+            } else {
+                countries = data.countries[0];
+            }
+            let grossIncome = null;
+            if (data.worldwide_gross_income !== null) {
+                grossIncome = data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
+            };
+            const description = data.description;
+            console.log(filmData.title);
+        });
+
     }
 }
+
 
 // Récupération et affichage de la data du meilleur film selon sa note IMDb (best film)
 const bestFilmsPromise = getData(urlImdbScore);
@@ -132,10 +167,77 @@ bestFilmsPromise.then(bestFilms => {
     const sectionLocation = document.getElementById(sectionTitle);
     firstFilm = bestFilms.results[0];
     firstFilmTitle = firstFilm.title;
+    firstFilmUrl = firstFilm.url;
     const filmTitle = createHtmlElement("h1", firstFilmTitle);
     sectionLocation.appendChild(filmTitle);
     const firstFilmImage = createHtmlImg(firstFilm.image_url, firstFilm.title);
     sectionLocation.appendChild(firstFilmImage);
+    
+    
+    const modalId = "modal1"
+    const modalLocation = document.getElementById(modalId);
+
+    modalLocation.appendChild(firstFilmImage);
+    modalLocation.appendChild(filmTitle);
+    const firstFilmPromise = getData(firstFilmUrl);
+    firstFilmPromise.then(data => {
+        const img = data.image_url;
+        const title = data.title;
+        const genre = data.genres.join(", ");
+        const date = data.date_published;
+        let rated = null;
+        if (data.rated !== "Not rated or unkown rating" || "Not Rated") {
+            rated = data.rated;
+        }
+        const imdb = data.imdb_score;
+        let director = null;
+        if (data.directors.length > 1) {
+            director = data.directors.join(", ");
+        } else {
+            director = data.directors[0];
+        }
+        const actors = "Acteurs : " + data.actors.join(", ");
+        const duration = data.duration + " mins";
+        let countries = null;
+        if (data.countries.length > 1) {
+            countries = data.countries.join(", ");
+        } else {
+            countries = data.countries[0];
+        }
+        let grossIncome = null;
+        if (data.worldwide_gross_income !== null) {
+            grossIncome = "Résultat au box-office : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
+        };
+        const description = "Description : " + data.description;
+
+        let durationDateRatedContent = null;
+        if (rated !== null) {
+            durationDateRatedContent = duration + " - " + date + " - " + rated;
+        } else {
+            durationDateRatedContent = duration + " - " + date;
+        }
+        const h2DurationDateRated = createHtmlElement("h2", durationDateRatedContent);
+        modalLocation.appendChild(h2DurationDateRated);
+
+        const genreDirectorCountryContent = genre + " - " + director + " - " + countries
+        const h3GenreDirectorCountry = createHtmlElement("h3", genreDirectorCountryContent);
+        modalLocation.appendChild(h3GenreDirectorCountry);
+        
+        const pDescription = createHtmlElement("p", description);
+        modalLocation.appendChild(pDescription);
+
+        const pActors = createHtmlElement("p", actors);
+        modalLocation.appendChild(pActors);
+
+        if (grossIncome !== null) {
+            const pGrossIncome = createHtmlElement("p", grossIncome);
+            modalLocation.appendChild(pGrossIncome);
+        }
+        
+        debugger     
+    });
+    
+    
 });
 
 /* Récupération de la data des 7 meilleurs films selon leur note IMDb (best rated films).
@@ -170,6 +272,11 @@ const openModal = function (event) {
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
 }
 
+/*const loadModal(target) {
+
+}
+*/
+
 const closeModal = function (event) {
     if (modal === null) return;
     event.preventDefault();
@@ -199,6 +306,18 @@ window.addEventListener("keydown", function (event) {
         closeModal(event);
     }
 })
+
+async function get7BestFilmsUrlbyImdbScore(category) {
+    const url = urlImdbScore7films + "&genre=" + category;
+    const best7FilmsbyCategoryPromise = getData(url);
+    const data = await best7FilmsbyCategoryPromise;
+    const best7FilmsUrl = [];
+    for (let result of data.results) {
+        best7FilmsUrl.push(result.url);  
+    }
+    return best7FilmsUrl;
+    }
+    
 
 
 /*
