@@ -174,48 +174,53 @@ bestFilmsPromise.then(bestFilms => {
     sectionLocation.appendChild(firstFilmImage);
     
     
-    const modalId = "modal1"
-    const modalLocation = document.getElementById(modalId);
-
-    modalLocation.appendChild(firstFilmImage);
-    modalLocation.appendChild(filmTitle);
+    const modalClass = ".modal-wrapper"
+    const modalLocation = document.querySelector(modalClass);
     const firstFilmPromise = getData(firstFilmUrl);
     firstFilmPromise.then(data => {
         const img = data.image_url;
         const title = data.title;
-        const genre = data.genres.join(", ");
+        const genre = "Genres : " + data.genres.join(", ");
         const date = data.date_published;
         let rated = null;
-        if (data.rated !== "Not rated or unkown rating" || "Not Rated") {
+        if (data.rated !== "Not rated or unkown rating" && data.rated !== "Not Rated") {
             rated = data.rated;
         }
-        const imdb = data.imdb_score;
+
+        const imdb = "IMDb Score : " + data.imdb_score;
         let director = null;
         if (data.directors.length > 1) {
-            director = data.directors.join(", ");
+            director = "Director : " + data.directors.join(", ");
         } else {
-            director = data.directors[0];
+            director = "Director : " + data.directors[0];
         }
-        const actors = "Acteurs : " + data.actors.join(", ");
-        const duration = data.duration + " mins";
+        const actors = "Actors : " + data.actors.join(", ");
+        const duration = "Duration : " + data.duration + " mins";
         let countries = null;
         if (data.countries.length > 1) {
-            countries = data.countries.join(", ");
+            countries = "Country : " + data.countries.join(", ");
         } else {
-            countries = data.countries[0];
+            countries = "Country : " + data.countries[0];
         }
         let grossIncome = null;
         if (data.worldwide_gross_income !== null) {
-            grossIncome = "Résultat au box-office : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
+            grossIncome = "Worldwide Gross Income : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
         };
         const description = "Description : " + data.description;
 
         let durationDateRatedContent = null;
         if (rated !== null) {
-            durationDateRatedContent = duration + " - " + date + " - " + rated;
+            durationDateRatedContent = "Duration : " + duration + " - Release date : " + date + " - " + rated;
         } else {
-            durationDateRatedContent = duration + " - " + date;
+            durationDateRatedContent = duration + " - Release date : " + date;
         }
+        
+        const firstFilmImageModal = createHtmlImg(img, title);
+        modalLocation.appendChild(firstFilmImageModal);
+
+        const h1Title = createHtmlElement("h1", title);
+        modalLocation.appendChild(h1Title);
+
         const h2DurationDateRated = createHtmlElement("h2", durationDateRatedContent);
         modalLocation.appendChild(h2DurationDateRated);
 
@@ -233,8 +238,7 @@ bestFilmsPromise.then(bestFilms => {
             const pGrossIncome = createHtmlElement("p", grossIncome);
             modalLocation.appendChild(pGrossIncome);
         }
-        
-        debugger     
+           
     });
     
     
@@ -307,20 +311,13 @@ window.addEventListener("keydown", function (event) {
     }
 })
 
-async function get7BestFilmsUrlbyImdbScore(category) {
-    const url = urlImdbScore7films + "&genre=" + category;
-    const best7FilmsbyCategoryPromise = getData(url);
-    const data = await best7FilmsbyCategoryPromise;
-    const best7FilmsUrl = [];
-    for (let result of data.results) {
-        best7FilmsUrl.push(result.url);  
-    }
-    return best7FilmsUrl;
-    }
+
     
 
 
 /*
+
+
 
 const best7FilmsPromise = getData(urlImdbScore7films);
 best7FilmsPromise.then(best7Films => {
