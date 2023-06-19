@@ -19,14 +19,37 @@ body, html {
     
 }
 
+.js-modal-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
 .modal-wrapper {
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 600px;
     max-width: calc(100vw - 20px);
     max-height: calc(100vh -20px);
     padding: 20px;
     background-color: #fff;
     animation: slideFromTop .5s both .1s;
+}
+
+.modal-wrapper h1 {
+    font-size: 220%;
+}
+
+.modal-wrapper p {
+    text-align: justify;
+}
+
+.modal-wrapper img {
+    width: 40%;
+    height: auto;
 }
 
 .modal[aria-hidden="true"] {
