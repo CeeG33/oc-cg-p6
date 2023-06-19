@@ -117,43 +117,91 @@ function carousel(sectionId, carouselTitle, data) {
     const carouselUl = createHtmlElementWithDataTarget("ul", "", "carousel", "carousel");
     sectionLocation.appendChild(carouselUl);
     console.log(dataDetails);
-    for (let film of dataDetails) {
-        const filmCard = createHtmlElementWithDataTarget("li", "", "card", "card");
+    for (let [index, film] of dataDetails.entries()) {
+        const modalLink = createHtmlElement("a", "", "js-modal");
+        modalLink.setAttribute("href", `#${sectionTitle}-modal-${index}`);
+        const filmCard = createHtmlElementWithDataTarget("li", "", "card", "js-modal");
         const filmImg = createHtmlImg(film.image_url, film.title);
         const filmUrl = film.url;
+        const modalContainer = createHtmlElement("aside", null, "modal", `#${sectionTitle}-modal-${index}`);
+        modalContainer.setAttribute("aria-hidden", "true");
+        modalContainer.setAttribute("role", "dialog");
+        modalContainer.setAttribute("aria-labelledby", "titlemodal");
+        modalContainer.setAttribute("style", "display:none;");
+        const modalWrapper = createHtmlElement("div", null, "modal-wrapper js-modal-stop");
+        const closeButton = createHtmlElement("button", "Close", "js-modal-close");
+        modalWrapper.appendChild(closeButton);
+        modalContainer.appendChild(modalWrapper);
+        filmCard.appendChild(modalContainer);
         filmCard.appendChild(filmImg);
-        carouselUl.appendChild(filmCard);
+        modalLink.appendChild(filmCard);
+        carouselUl.appendChild(modalLink);
+        const modalWrapperElement = modalContainer.querySelector("div");
+        const modalId = modalWrapperElement.id;
+        const modalLocation = modalLink.getElementById(modalId);
         const filmDataPromise = getData(filmUrl);
-        const filmData = filmDataPromise.then(data => {
+        filmDataPromise.then(data => {
             const img = data.image_url;
             const title = data.title;
-            const genre = data.genres.join(", ");
+            const genre = "Genres : " + data.genres.join(", ");
             const date = data.date_published;
             let rated = null;
-            if (data.rated !== "Not rated or unkown rating" || "Not Rated") {
+            if (data.rated !== "Not rated or unkown rating" && data.rated !== "Not Rated") {
                 rated = data.rated;
             }
-            const imdb = data.imdb_score;
+    
+            const imdb = "IMDb Score : " + data.imdb_score;
             let director = null;
             if (data.directors.length > 1) {
-                director = data.directors.join(", ");
+                director = "Director : " + data.directors.join(", ");
             } else {
-                director = data.directors[0];
+                director = "Director : " + data.directors[0];
             }
-            const actors = data.actors.join(", ");
-            const duration = data.duration + " mins";
+            const actors = "Actors : " + data.actors.join(", ");
+            const duration = "Duration : " + data.duration + " mins";
             let countries = null;
             if (data.countries.length > 1) {
-                countries = data.countries.join(", ");
+                countries = "Country : " + data.countries.join(", ");
             } else {
-                countries = data.countries[0];
+                countries = "Country : " + data.countries[0];
             }
             let grossIncome = null;
             if (data.worldwide_gross_income !== null) {
-                grossIncome = data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
+                grossIncome = "Worldwide Gross Income : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
             };
-            const description = data.description;
-            console.log(filmData.title);
+            const description = "Description : " + data.description;
+    
+            let durationDateRatedContent = null;
+            if (rated !== null) {
+                durationDateRatedContent = "Duration : " + duration + " - Release date : " + date + " - " + rated;
+            } else {
+                durationDateRatedContent = duration + " - Release date : " + date;
+            }
+            
+            const firstFilmImageModal = createHtmlImg(img, title);
+            modalLocation.appendChild(firstFilmImageModal);
+    
+            const h1Title = createHtmlElement("h1", title);
+            modalLocation.appendChild(h1Title);
+    
+            const h2DurationDateRated = createHtmlElement("h2", durationDateRatedContent);
+            modalLocation.appendChild(h2DurationDateRated);
+    
+            const genreDirectorCountryContent = genre + " - " + director + " - " + countries
+            const h3GenreDirectorCountry = createHtmlElement("h3", genreDirectorCountryContent);
+            modalLocation.appendChild(h3GenreDirectorCountry);
+            
+            const pDescription = createHtmlElement("p", description);
+            modalLocation.appendChild(pDescription);
+    
+            const pActors = createHtmlElement("p", actors);
+            modalLocation.appendChild(pActors);
+    
+            if (grossIncome !== null) {
+                const pGrossIncome = createHtmlElement("p", grossIncome);
+                modalLocation.appendChild(pGrossIncome);
+            }
+               
         });
 
     }
@@ -230,6 +278,9 @@ bestFilmsPromise.then(bestFilms => {
         
         const pDescription = createHtmlElement("p", description);
         modalLocation.appendChild(pDescription);
+
+        const pDescriptionBestFilm = createHtmlElement("p", description);
+        sectionLocation.appendChild(pDescriptionBestFilm);
 
         const pActors = createHtmlElement("p", actors);
         modalLocation.appendChild(pActors);
