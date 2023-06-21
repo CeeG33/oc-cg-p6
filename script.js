@@ -26,7 +26,7 @@ textContent = Contenu texte de la balise.
 className = Classe de la balise(ignoré si nul).
 idName = ID de la balise(ignoré si nul).
 */
-function createHtmlElement(typeToCreate, textContent, className = null, idName = null) {
+function createHtmlElement(typeToCreate, textContent = null, className = null, idName = null) {
     const element = document.createElement(typeToCreate);
     element.textContent = textContent; 
     if (className !==  null) { 
@@ -46,7 +46,7 @@ dataAction = Action déclenchée par la balise.
 className = Classe de la balise(ignoré si nul).
 idName = ID de la balise(ignoré si nul).
 */
-function createHtmlElementWithDataAction(typeToCreate, textContent, dataAction, className = null, idName = null) {
+function createHtmlElementWithDataAction(typeToCreate, textContent = null, dataAction, className = null, idName = null) {
     const element = document.createElement(typeToCreate);
     element.textContent = textContent; 
     if (className !==  null) { 
@@ -68,7 +68,7 @@ dataTarget = Data ciblée par la balise.
 className = Classe de la balise(ignoré si nul).
 idName = ID de la balise(ignoré si nul).
 */
-function createHtmlElementWithDataTarget(typeToCreate, textContent, dataTarget, className = null, idName = null) {
+function createHtmlElementWithDataTarget(typeToCreate, textContent = null, dataTarget, className = null, idName = null) {
     const element = document.createElement(typeToCreate);
     element.textContent = textContent; 
     if (className !==  null) { 
@@ -116,97 +116,100 @@ function carousel(sectionId, carouselTitle, data) {
     buttonDiv.appendChild(buttonR);
     const carouselUl = createHtmlElementWithDataTarget("ul", "", "carousel", "carousel");
     sectionLocation.appendChild(carouselUl);
-    console.log(dataDetails);
-    for (let [index, film] of dataDetails.entries()) {
-        const modalLink = createHtmlElement("a", "", "js-modal");
-        modalLink.setAttribute("href", `#${sectionTitle}-modal-${index}`);
-        const filmCard = createHtmlElementWithDataTarget("li", "", "card", "js-modal");
-        const filmImg = createHtmlImg(film.image_url, film.title);
-        const filmUrl = film.url;
-        const modalContainer = createHtmlElement("aside", null, "modal", `#${sectionTitle}-modal-${index}`);
-        modalContainer.setAttribute("aria-hidden", "true");
-        modalContainer.setAttribute("role", "dialog");
-        modalContainer.setAttribute("aria-labelledby", "titlemodal");
-        modalContainer.setAttribute("style", "display:none;");
-        const modalWrapper = createHtmlElement("div", null, "modal-wrapper js-modal-stop");
-        const closeButton = createHtmlElement("button", "Close", "js-modal-close");
-        modalWrapper.appendChild(closeButton);
-        modalContainer.appendChild(modalWrapper);
-        filmCard.appendChild(modalContainer);
-        filmCard.appendChild(filmImg);
-        modalLink.appendChild(filmCard);
-        carouselUl.appendChild(modalLink);
-        const modalWrapperElement = modalContainer.querySelector("div");
-        const modalId = modalWrapperElement.id;
-        const modalLocation = modalLink.getElementById(modalId);
-        const filmDataPromise = getData(filmUrl);
-        filmDataPromise.then(data => {
-            const img = data.image_url;
-            const title = data.title;
-            const genre = "Genres : " + data.genres.join(", ");
-            const date = data.date_published;
-            let rated = null;
-            if (data.rated !== "Not rated or unkown rating" && data.rated !== "Not Rated") {
-                rated = data.rated;
-            }
-    
-            const imdb = "IMDb Score : " + data.imdb_score;
-            let director = null;
-            if (data.directors.length > 1) {
-                director = "Director : " + data.directors.join(", ");
-            } else {
-                director = "Director : " + data.directors[0];
-            }
-            const actors = "Actors : " + data.actors.join(", ");
-            const duration = "Duration : " + data.duration + " mins";
-            let countries = null;
-            if (data.countries.length > 1) {
-                countries = "Country : " + data.countries.join(", ");
-            } else {
-                countries = "Country : " + data.countries[0];
-            }
-            let grossIncome = null;
-            if (data.worldwide_gross_income !== null) {
-                grossIncome = "Worldwide Gross Income : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
-            };
-            const description = "Description : " + data.description;
-    
-            let durationDateRatedContent = null;
-            if (rated !== null) {
-                durationDateRatedContent = "Duration : " + duration + " - Release date : " + date + " - " + rated;
-            } else {
-                durationDateRatedContent = duration + " - Release date : " + date;
-            }
-            
-            const firstFilmImageModal = createHtmlImg(img, title);
-            modalLocation.appendChild(firstFilmImageModal);
-    
-            const h1Title = createHtmlElement("h1", title);
-            modalLocation.appendChild(h1Title);
-    
-            const h2DurationDateRated = createHtmlElement("h2", durationDateRatedContent);
-            modalLocation.appendChild(h2DurationDateRated);
-    
-            const genreDirectorCountryContent = genre + " - " + director + " - " + countries
-            const h3GenreDirectorCountry = createHtmlElement("h3", genreDirectorCountryContent);
-            modalLocation.appendChild(h3GenreDirectorCountry);
-            
-            const pDescription = createHtmlElement("p", description);
-            modalLocation.appendChild(pDescription);
-    
-            const pActors = createHtmlElement("p", actors);
-            modalLocation.appendChild(pActors);
-    
-            if (grossIncome !== null) {
-                const pGrossIncome = createHtmlElement("p", grossIncome);
-                modalLocation.appendChild(pGrossIncome);
-            }
-               
-        });
 
+    console.log(dataDetails);
+    
+    for (let film of dataDetails) {
+        const filmUrl = film.url;
+        const filmCard = createHtmlElementWithDataTarget("li", "", "card", "js-modal");
+        const linkContainer = createHtmlElement("a", null, "js-modal");
+        linkContainer.setAttribute("href", "#modal");
+        linkContainer.addEventListener("click", (event) => openModal(event, filmUrl));
+
+        const filmImg = createHtmlImg(film.image_url, film.title);
+        linkContainer.appendChild(filmImg);
+
+        filmCard.appendChild(linkContainer);
+
+        carouselUl.appendChild(filmCard);
+        
     }
 }
+/* Charge les informations d'un film et crée les balises HTML dédiées selon les paramètres suivants :
+data = Data de la film à charger.
+modalLocation = Emplacement de la modale.
+*/
 
+function loadFilmData(data, modalLocation) {
+    const img = data.image_url;
+    const title = data.title;
+    const genre = "Genres : " + data.genres.join(", ");
+    const date = data.date_published;
+    let rated = null;
+    if (data.rated !== "Not rated or unkown rating" && data.rated !== "Not Rated") {
+        rated = data.rated;
+    }
+
+    const imdb = "IMDb Score : " + data.imdb_score;
+    let director = null;
+    if (data.directors.length > 1) {
+        director = "Director : " + data.directors.join(", ");
+    } else {
+        director = "Director : " + data.directors[0];
+    }
+    const actors = "Actors : " + data.actors.join(", ");
+    const duration = "Duration : " + data.duration + " mins";
+    let countries = null;
+    if (data.countries.length > 1) {
+        countries = "Country : " + data.countries.join(", ");
+    } else {
+        countries = "Country : " + data.countries[0];
+    }
+    let grossIncome = null;
+    if (data.worldwide_gross_income !== null) {
+        debugger
+        grossIncome = "Worldwide Gross Income : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
+    } else {
+        grossIncome = "";
+    }
+    debugger
+    const description = "Description : " + data.description;
+
+    let durationDateRatedContent = null;
+    if (rated !== null) {
+        durationDateRatedContent = "Duration : " + duration + " - Release date : " + date + " - " + rated;
+    } else {
+        durationDateRatedContent = duration + " - Release date : " + date;
+    }
+    
+    let filmImageModal = modalLocation.querySelector("img");
+    filmImageModal.src = img;
+    filmImageModal.alt = title + " Cover Image";
+
+    let h1Title = modalLocation.querySelector("h1");
+    h1Title.textContent = title;
+
+    let h2DurationDateRated = modalLocation.querySelector("h2");
+    h2DurationDateRated.textContent = durationDateRatedContent;
+
+    const genreDirectorCountryContent = genre + " - " + director + " - " + countries
+    let h3GenreDirectorCountry = modalLocation.querySelector("h3");
+    h3GenreDirectorCountry.textContent = genreDirectorCountryContent;
+
+    let h3ImdbScore = modalLocation.querySelector("h3.imdb-score");
+    h3ImdbScore.textContent = imdb;
+    
+    let descriptionContent = modalLocation.querySelector("p.description");
+    descriptionContent.textContent = description;
+
+    let actorsContent = modalLocation.querySelector("p.actors");
+    actorsContent.textContent = actors;
+
+    if (grossIncome !== null) {
+        let grossIncomeContent = modalLocation.querySelector("p.gross-income");
+        grossIncomeContent.textContent = grossIncome;
+    }
+}
 
 // Récupération et affichage de la data du meilleur film selon sa note IMDb (best film)
 const bestFilmsPromise = getData(urlImdbScore);
@@ -220,75 +223,12 @@ bestFilmsPromise.then(bestFilms => {
     sectionLocation.appendChild(filmTitle);
     const firstFilmImage = createHtmlImg(firstFilm.image_url, firstFilm.title);
     sectionLocation.appendChild(firstFilmImage);
-    
-    
+
     const modalClass = ".modal-wrapper"
     const modalLocation = document.querySelector(modalClass);
     const firstFilmPromise = getData(firstFilmUrl);
     firstFilmPromise.then(data => {
-        const img = data.image_url;
-        const title = data.title;
-        const genre = "Genres : " + data.genres.join(", ");
-        const date = data.date_published;
-        let rated = null;
-        if (data.rated !== "Not rated or unkown rating" && data.rated !== "Not Rated") {
-            rated = data.rated;
-        }
-
-        const imdb = "IMDb Score : " + data.imdb_score;
-        let director = null;
-        if (data.directors.length > 1) {
-            director = "Director : " + data.directors.join(", ");
-        } else {
-            director = "Director : " + data.directors[0];
-        }
-        const actors = "Actors : " + data.actors.join(", ");
-        const duration = "Duration : " + data.duration + " mins";
-        let countries = null;
-        if (data.countries.length > 1) {
-            countries = "Country : " + data.countries.join(", ");
-        } else {
-            countries = "Country : " + data.countries[0];
-        }
-        let grossIncome = null;
-        if (data.worldwide_gross_income !== null) {
-            grossIncome = "Worldwide Gross Income : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
-        };
-        const description = "Description : " + data.description;
-
-        let durationDateRatedContent = null;
-        if (rated !== null) {
-            durationDateRatedContent = "Duration : " + duration + " - Release date : " + date + " - " + rated;
-        } else {
-            durationDateRatedContent = duration + " - Release date : " + date;
-        }
-        
-        const firstFilmImageModal = createHtmlImg(img, title);
-        modalLocation.appendChild(firstFilmImageModal);
-
-        const h1Title = createHtmlElement("h1", title);
-        modalLocation.appendChild(h1Title);
-
-        const h2DurationDateRated = createHtmlElement("h2", durationDateRatedContent);
-        modalLocation.appendChild(h2DurationDateRated);
-
-        const genreDirectorCountryContent = genre + " - " + director + " - " + countries
-        const h3GenreDirectorCountry = createHtmlElement("h3", genreDirectorCountryContent);
-        modalLocation.appendChild(h3GenreDirectorCountry);
-        
-        const pDescription = createHtmlElement("p", description);
-        modalLocation.appendChild(pDescription);
-
-        const pDescriptionBestFilm = createHtmlElement("p", description);
-        sectionLocation.appendChild(pDescriptionBestFilm);
-
-        const pActors = createHtmlElement("p", actors);
-        modalLocation.appendChild(pActors);
-
-        if (grossIncome !== null) {
-            const pGrossIncome = createHtmlElement("p", grossIncome);
-            modalLocation.appendChild(pGrossIncome);
-        }
+        loadFilmData(data, modalLocation);
            
     });
     
@@ -316,21 +256,20 @@ const best7FilmsSportCategoryCarousel = best7FilmsSportCategoryPromise.then(data
 
 let modal = null;
 
-const openModal = function (event) {
+const openModal = function (event, filmUrl) {
     event.preventDefault();
-    modal = document.querySelector(event.target.getAttribute("href"));
+    modal = document.getElementById("modal");
     modal.style.display = null;
     modal.removeAttribute("aria-hidden");
     modal.setAttribute("aria-modal", "true");
     modal.addEventListener("click", closeModal);
     modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+    const filmDataPromise = getData(filmUrl);
+            filmDataPromise.then(data => {
+                loadFilmData(data, document.querySelector(".modal-wrapper"));
+            });
 }
-
-/*const loadModal(target) {
-
-}
-*/
 
 const closeModal = function (event) {
     if (modal === null) return;
@@ -345,15 +284,14 @@ const closeModal = function (event) {
     modal.removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-close").removeEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
-    
 }
 
 const stopPropagation = function (event) {
     event.stopPropagation()
 }
 
-document.querySelectorAll(".js-modal").forEach(lien => {
-    lien.addEventListener("click", openModal);
+document.querySelectorAll(".js-modal").forEach(link => {
+    link.addEventListener("click", openModal);
 })
 
 window.addEventListener("keydown", function (event) {
@@ -362,8 +300,25 @@ window.addEventListener("keydown", function (event) {
     }
 })
 
-
-    
+function openBestFilmModal() {
+    const modalLocation = document.querySelector(".modal-wrapper");
+    const bestFilmPromise = getData(urlImdbScore);
+    bestFilmPromise.then(data => {
+        const bestFilm = data.results[0];
+        const bestFilmUrl = bestFilm.url;
+        const bestFilmPromise2 = getData(bestFilmUrl);
+        bestFilmPromise2.then(data => {
+            loadFilmData(data, modalLocation);
+            modal.style.display = null;
+            modal.removeAttribute("aria-hidden");
+            modal.setAttribute("aria-modal", "true");
+            modal.addEventListener("click", closeModal);
+            modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+            modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+        })
+        
+    });
+}
 
 
 /*
