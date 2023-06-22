@@ -1,6 +1,92 @@
 body, html {
     margin: 0;
     padding: 0;
+    font-family: Tahoma;
+    background-color: #1F2833;
+}
+
+
+nav {
+    display: flex;
+    list-style-type: none;
+    width: auto;
+    color: #66FCF1;
+    margin: 20px auto;
+    position: relative;
+    left: 0;
+    right: 0;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+}
+
+nav li {
+    margin: 0 20px;
+}
+
+nav img {
+    width: 130px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+:visited, :link {
+    color: #66FCF1;
+    text-decoration: none;
+}
+
+section#best-film a {
+    font-size: 35px;
+    padding: 6px;
+    padding-left: 12px;
+    border: 2px solid #66FCF1;
+    border-radius: 50%;
+}
+
+
+div.modal-wrapper button {
+    font-size: 20px;
+    font-weight: 700;
+    color: #66FCF1;
+    padding-top: 3px;
+    background-color: #1F2833;
+    cursor: pointer;
+    border: 2px solid #66FCF1;
+    border-radius: 50%;
+}
+
+h1 {
+    color: #66FCF1;
+    font-variant: small-caps;
+}
+
+footer img {
+    width: 100px;
+}
+
+footer {
+    display: flex;
+    margin: 20px 20px 20px 20px;
+    justify-content: space-evenly;
+
+}
+
+footer h1 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+footer ul {
+    list-style-type: circle;
+    color: #66FCF1;
+    font-size: 15px;
+
 }
 
 * { box-sizing: border-box; }
@@ -35,12 +121,18 @@ body, html {
     max-width: calc(100vw - 20px);
     max-height: calc(100vh -20px);
     padding: 20px;
-    background-color: #fff;
+    background-color: #1F2833;
     animation: slideFromTop .5s both .1s;
 }
 
 .modal-wrapper h1 {
     font-size: 220%;
+    color: #C5C6C7;
+}
+
+.modal-wrapper {
+    color: #C5C6C7;
+    font-size: small;
 }
 
 .modal-wrapper p {
@@ -48,7 +140,7 @@ body, html {
 }
 
 .modal-wrapper img {
-    width: 40%;
+    width: 50%;
     height: auto;
 }
 
@@ -80,42 +172,60 @@ body, html {
     to { transform: translateY(-50px);}
 }
 
-/*
-body {
-    font-family: Tahoma;
-    color: black
-}
-
-header {
-    background-color: #66FCF1;
-}
-
-header h1, header li {
-    color: #0B0C10
-}
-
-section, section h1 {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-}
-
-.best-rated-film {
-    height: 200px;
-    width: 632px;
+section {
+    height: 350px;
+    width: 728px;
     position: relative;
     overflow: hidden;
     margin: 0 auto;
 }
 
+section#best-film {
+    padding-top: 20px;
+    height: 600px;
+
+}
+
+section#best-film img {
+    width: 728px;
+    height: 650px;
+}
+
+section#best-film h1 {
+    position: absolute;
+    top: 200px;
+    left: 20px;
+    font-size: 50px;
+    background-color: #1F283390;
+}
+
+section#best-film a {
+    position: absolute;
+    top: 330px;
+    left: 40px;
+    background-color: #1F283390;
+}
+
+
+
 .button-carousel {
     width: 100%;
-    height: 100%;
+    height: 271px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: absolute;
+    
 }
+
+.button-carousel button[data-action="slideLeft"] {
+    margin-left: -28px;
+}
+
+.button-carousel button[data-action="slideRight"] {
+    margin-right: -28px;
+}
+
 
 .carousel {
     margin: 0;
@@ -124,6 +234,7 @@ section, section h1 {
     width: 100%;
     display: flex;
     position: absolute;
+    align-items: center;
     left: 0;
     transition: all 1s ease;
 }
@@ -136,8 +247,3 @@ section, section h1 {
     display: inline-block;
 }
 
-.best-film .best-rated-film .crime-category .fantasy-category .mystery-category footer {
-    display: flex;
-    flex-direction: column;
-}
-*/
