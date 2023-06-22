@@ -167,12 +167,10 @@ function loadFilmData(data, modalLocation) {
     }
     let grossIncome = null;
     if (data.worldwide_gross_income !== null) {
-        debugger
         grossIncome = "Worldwide Gross Income : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
     } else {
         grossIncome = "";
     }
-    debugger
     const description = "Description : " + data.description;
 
     let durationDateRatedContent = null;
@@ -240,19 +238,19 @@ Création d'un caroussel.
 Affichage de la data dans le caroussel.
 */
 const best7FilmsPromise = getData(urlImdbScore7films);
-const best7FilmsCarousel = best7FilmsPromise.then(data => carousel("best-rated-films", "Les films les mieux notés", data));
+const best7FilmsCarousel = best7FilmsPromise.then(data => carousel("best-rated-films", "best rated films", data));
 
 // Idem pour la catégorie Crime.
 const best7FilmsCrimeCategoryPromise = getData(urlImdbScore7filmsCrimeCategory);
-const best7FilmsCrimeCategoryCarousel = best7FilmsCrimeCategoryPromise.then(data => carousel("crime-category", "Crime", data));
+const best7FilmsCrimeCategoryCarousel = best7FilmsCrimeCategoryPromise.then(data => carousel("crime-category", "crime", data));
 
 // Idem pour la catégorie Mystery.
 const best7FilmsMysteryCategoryPromise = getData(urlImdbScore7filmsMysteryCategory);
-const best7FilmsMysteryCategoryCarousel = best7FilmsMysteryCategoryPromise.then(data => carousel("mystery-category", "Mystery", data));
+const best7FilmsMysteryCategoryCarousel = best7FilmsMysteryCategoryPromise.then(data => carousel("mystery-category", "mystery", data));
 
 // Idem pour la catégorie Sport.
 const best7FilmsSportCategoryPromise = getData(urlImdbScore7filmsSportCategory);
-const best7FilmsSportCategoryCarousel = best7FilmsSportCategoryPromise.then(data => carousel("sport-category", "Sport", data));
+const best7FilmsSportCategoryCarousel = best7FilmsSportCategoryPromise.then(data => carousel("sport-category", "sport", data));
 
 let modal = null;
 
