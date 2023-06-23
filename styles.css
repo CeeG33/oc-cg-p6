@@ -5,7 +5,7 @@ body, html {
     background-color: #1F2833;
 }
 
-
+/* --- HEADER --- */
 nav {
     display: flex;
     list-style-type: none;
@@ -41,6 +41,7 @@ ul {
     text-decoration: none;
 }
 
+/* --- BEST FILM --- */
 section#best-film a {
     font-size: 35px;
     padding: 6px;
@@ -49,30 +50,46 @@ section#best-film a {
     border-radius: 50%;
 }
 
-
-div.modal-wrapper button {
-    font-size: 20px;
-    font-weight: 700;
-    color: #66FCF1;
-    padding-top: 3px;
-    background-color: #1F2833;
-    cursor: pointer;
-    border: 2px solid #66FCF1;
-    border-radius: 50%;
+section#best-film {
+    padding-top: 20px;
+    height: 600px;
+    margin-bottom: 100px;
 }
 
+section#best-film img {
+    width: 728px;
+    height: 650px;
+}
+
+section#best-film h1 {
+    position: absolute;
+    top: 200px;
+    left: 20px;
+    font-size: 50px;
+    background-color: #1F283390;
+}
+
+section#best-film a {
+    position: absolute;
+    top: 330px;
+    left: 40px;
+    background-color: #1F283390;
+}
+
+/* --- ALL H1 --- */
 h1 {
     color: #66FCF1;
     font-variant: small-caps;
 }
 
+/* --- FOOTER --- */
 footer img {
     width: 100px;
 }
 
 footer {
     display: flex;
-    margin: 20px 20px 20px 20px;
+    margin: 40px 20px 20px 20px;
     justify-content: space-evenly;
 
 }
@@ -89,7 +106,10 @@ footer ul {
 
 }
 
+
 * { box-sizing: border-box; }
+
+/* --- POP-UP --- */
 
 .modal {
     position: fixed;
@@ -172,42 +192,27 @@ footer ul {
     to { transform: translateY(-50px);}
 }
 
+/* --- POP-UP'S CLOSE BUTTON --- */
+div.modal-wrapper button {
+    font-size: 20px;
+    font-weight: 700;
+    color: #66FCF1;
+    padding-top: 3px;
+    background-color: #1F2833;
+    cursor: pointer;
+    border: 2px solid #66FCF1;
+    border-radius: 50%;
+}
+
+/* --- SLIDESHOW CONTAINER --- */
 section {
-    height: 350px;
+    height: 320px;
     width: 728px;
     position: relative;
-    overflow: hidden;
     margin: 0 auto;
 }
 
-section#best-film {
-    padding-top: 20px;
-    height: 600px;
-
-}
-
-section#best-film img {
-    width: 728px;
-    height: 650px;
-}
-
-section#best-film h1 {
-    position: absolute;
-    top: 200px;
-    left: 20px;
-    font-size: 50px;
-    background-color: #1F283390;
-}
-
-section#best-film a {
-    position: absolute;
-    top: 330px;
-    left: 40px;
-    background-color: #1F283390;
-}
-
-
-
+/* --- SLIDESHOW BUTTONS --- */
 .button-carousel {
     width: 100%;
     height: 271px;
@@ -219,14 +224,28 @@ section#best-film a {
 }
 
 .button-carousel button[data-action="slideLeft"] {
-    margin-left: -28px;
+    margin-left: -45px;
+    font-size: 22px;
+    color: #66FCF1;
+    padding-top: 2px;
+    background-color: #1F2833;
+    cursor: pointer;
+    border: 1px solid #66FCF1;
+    border-radius: 50%;
 }
 
 .button-carousel button[data-action="slideRight"] {
-    margin-right: -28px;
+    margin-right: -45px;
+    font-size: 22px;
+    color: #66FCF1;
+    padding-top: 2px;
+    background-color: #1F2833;
+    cursor: pointer;
+    border: 1px solid #66FCF1;
+    border-radius: 50%;
 }
 
-
+/* --- SLIDESHOW --- */
 .carousel {
     margin: 0;
     padding: 0;
@@ -237,10 +256,11 @@ section#best-film a {
     align-items: center;
     left: 0;
     transition: all 1s ease;
+    overflow: hidden;
 }
 
 .card {
-    background: black;
+    
     min-width: 200px;
     height: 200px;
     margin-right: 1rem;

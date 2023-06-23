@@ -110,9 +110,9 @@ function carousel(sectionId, carouselTitle, data) {
     sectionLocation.appendChild(h1);
     const buttonDiv = createHtmlElement("div", "", "button-carousel");
     sectionLocation.appendChild(buttonDiv);
-    const buttonL = createHtmlElementWithDataAction("button", "L", "slideLeft");
+    const buttonL = createHtmlElementWithDataAction("button", "⩤", "slideLeft");
     buttonDiv.appendChild(buttonL);
-    const buttonR = createHtmlElementWithDataAction("button", "R", "slideRight");
+    const buttonR = createHtmlElementWithDataAction("button", "⩥", "slideRight");
     buttonDiv.appendChild(buttonR);
     const carouselUl = createHtmlElementWithDataTarget("ul", "", "carousel", "carousel");
     sectionLocation.appendChild(carouselUl);
