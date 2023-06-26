@@ -10,6 +10,7 @@ const idLocationErrorMessage = "Problème de la localisation de l'ID dans le cod
 
 // Fonction qui récupère les données d'une URL donnée et les renvoie sous format JSON
 async function getData(url) {
+    if (url === undefined) return;
     const response = await fetch(url);
     const errorMessage = urlErrorMessage;
 
@@ -263,10 +264,11 @@ const openModal = function (event, filmUrl) {
     modal.addEventListener("click", closeModal);
     modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
+    if (filmUrl === undefined) return;
     const filmDataPromise = getData(filmUrl);
-            filmDataPromise.then(data => {
-                loadFilmData(data, document.querySelector(".modal-wrapper"));
-            });
+    filmDataPromise.then(data => {
+        loadFilmData(data, document.querySelector(".modal-wrapper"));
+        });
 }
 
 const closeModal = function (event) {
