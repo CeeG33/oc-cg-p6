@@ -54,6 +54,7 @@ section#best-film {
     padding-top: 20px;
     height: 600px;
     margin-bottom: 100px;
+    position: relative;
 }
 
 section#best-film img {
@@ -122,6 +123,7 @@ footer ul {
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
     animation: fadeIn 1s both;
+    z-index: 1;
     
 }
 
@@ -143,6 +145,7 @@ footer ul {
     padding: 20px;
     background-color: #1F2833;
     animation: slideFromTop .5s both .1s;
+    position: fixed;
 }
 
 .modal-wrapper h1 {
@@ -265,5 +268,6 @@ section {
     height: 200px;
     margin-right: 1rem;
     display: inline-block;
+    position: absolute;
 }
 
