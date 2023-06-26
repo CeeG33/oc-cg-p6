@@ -107,18 +107,21 @@ function carousel(sectionId, carouselTitle, data) {
     const sectionTitle = sectionId;
     const sectionLocation = document.getElementById(sectionTitle);
     const dataDetails = data.results;
+    
     const h1 = createHtmlElement("h1", carouselTitle);
     sectionLocation.appendChild(h1);
+    
     const buttonDiv = createHtmlElement("div", "", "button-carousel");
     sectionLocation.appendChild(buttonDiv);
+    
     const buttonL = createHtmlElementWithDataAction("button", "⩤", "slideLeft");
     buttonDiv.appendChild(buttonL);
+    
     const buttonR = createHtmlElementWithDataAction("button", "⩥", "slideRight");
     buttonDiv.appendChild(buttonR);
+    
     const carouselUl = createHtmlElementWithDataTarget("ul", "", "carousel", "carousel");
     sectionLocation.appendChild(carouselUl);
-
-    console.log(dataDetails);
     
     for (let film of dataDetails) {
         const filmUrl = film.url;
@@ -319,6 +322,19 @@ function openBestFilmModal() {
         
     });
 }
+
+
+
+const carouselWidth = 728
+const carouselElement = document.getElementsByClassName(".carousel");
+const cardElement = document.getElementsByClassName(".js-modal");
+console.log(carouselElement);
+console.log(cardElement);
+const carouselWidth2 = carouselElement.offsetWidth;
+const cardStyle = window.getComputedStyle(cardElement);
+console.log(cardStyle);
+console.log(carouselWidth2);
+
 
 
 /*
