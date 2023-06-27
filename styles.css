@@ -43,7 +43,7 @@ ul {
 
 /* --- BEST FILM --- */
 section#best-film a {
-    font-size: 35px;
+    font-size: 20px;
     padding: 6px;
     padding-left: 12px;
     border: 2px solid #66FCF1;
@@ -52,27 +52,27 @@ section#best-film a {
 
 section#best-film {
     padding-top: 20px;
-    height: 600px;
-    margin-bottom: 100px;
+    height: 320px;
+    margin-bottom: 20px;
     position: relative;
 }
 
 section#best-film img {
     width: 728px;
-    height: 650px;
+    height: 300px;
 }
 
 section#best-film h1 {
     position: absolute;
-    top: 200px;
+    top: 80px;
     left: 20px;
-    font-size: 50px;
+    font-size: 40px;
     background-color: #1F283390;
 }
 
 section#best-film a {
     position: absolute;
-    top: 330px;
+    top: 180px;
     left: 40px;
     background-color: #1F283390;
 }
@@ -209,25 +209,28 @@ div.modal-wrapper button {
 
 /* --- SLIDESHOW CONTAINER --- */
 section {
-    height: 320px;
+    height: 350px;
     width: 728px;
     position: relative;
     margin: 0 auto;
+    overflow: hidden;
+    
 }
 
 /* --- SLIDESHOW BUTTONS --- */
 .button-carousel {
     width: 100%;
     height: 271px;
+    
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: absolute;
-    
+    z-index: 1;
 }
 
 .button-carousel button[data-action="slideLeft"] {
-    margin-left: -45px;
+    
     font-size: 22px;
     color: #66FCF1;
     padding-top: 2px;
@@ -235,10 +238,11 @@ section {
     cursor: pointer;
     border: 1px solid #66FCF1;
     border-radius: 50%;
+    
 }
 
 .button-carousel button[data-action="slideRight"] {
-    margin-right: -45px;
+    
     font-size: 22px;
     color: #66FCF1;
     padding-top: 2px;
@@ -246,6 +250,7 @@ section {
     cursor: pointer;
     border: 1px solid #66FCF1;
     border-radius: 50%;
+    
 }
 
 /* --- SLIDESHOW --- */
@@ -256,18 +261,15 @@ section {
     width: 100%;
     display: flex;
     position: absolute;
-    align-items: center;
     left: 0;
     transition: all 1s ease;
-    overflow: hidden;
+    
 }
 
 .card {
-    
     min-width: 200px;
     height: 200px;
     margin-right: 1rem;
     display: inline-block;
-    position: absolute;
 }
 

@@ -103,7 +103,7 @@ carouselTitle = Titre du caroussel qui sera affiché à l'utilisateur.
 data = données à partir desquels se crée le caroussel.
 */
 
-function carousel(sectionId, carouselTitle, data) {
+function createCarousel(sectionId, carouselTitle, data) { 
     const sectionTitle = sectionId;
     const sectionLocation = document.getElementById(sectionTitle);
     const dataDetails = data.results;
@@ -122,7 +122,12 @@ function carousel(sectionId, carouselTitle, data) {
     
     const carouselUl = createHtmlElementWithDataTarget("ul", "", "carousel", "carousel");
     sectionLocation.appendChild(carouselUl);
+
+    const carouselWidth = carouselUl.offsetWidth;
     
+    let cardStyle;
+    let cardMarginRight;
+
     for (let film of dataDetails) {
         const filmUrl = film.url;
         const filmCard = createHtmlElementWithDataTarget("li", "", "card", "js-modal");
@@ -137,7 +142,31 @@ function carousel(sectionId, carouselTitle, data) {
 
         carouselUl.appendChild(filmCard);
         
+        cardStyle = window.getComputedStyle(filmCard);
+        
+        cardMarginRight = Number(cardStyle.marginRight.match(/\d+/g)[0]);
+        
     }
+    const cardCount = carouselUl.querySelectorAll("[data-target='card']").length;
+
+    let offset = 0;
+    const maxX = -728;
+    console.log(maxX);
+    
+    buttonL.addEventListener("click", function() {
+        if (offset !== 0) {
+            offset += carouselWidth + cardMarginRight;
+            carouselUl.style.transform = `translateX(${offset}px)`;
+        }
+    })
+
+    buttonR.addEventListener("click", function() {
+        if (offset !== maxX) {
+            offset -= carouselWidth + cardMarginRight;
+            carouselUl.style.transform = `translateX(${offset}px)`;
+        }
+    })
+    
 }
 /* Charge les informations d'un film et crée les balises HTML dédiées selon les paramètres suivants :
 data = Data de la film à charger.
@@ -146,35 +175,45 @@ modalLocation = Emplacement de la modale.
 
 function loadFilmData(data, modalLocation) {
     const img = data.image_url;
+
     const title = data.title;
+    
     const genre = "Genres : " + data.genres.join(", ");
+    
     const date = data.date_published;
+    
     let rated = null;
     if (data.rated !== "Not rated or unkown rating" && data.rated !== "Not Rated") {
         rated = data.rated;
     }
 
     const imdb = "IMDb Score : " + data.imdb_score;
+    
     let director = null;
     if (data.directors.length > 1) {
         director = "Director : " + data.directors.join(", ");
     } else {
         director = "Director : " + data.directors[0];
     }
+    
     const actors = "Actors : " + data.actors.join(", ");
+    
     const duration = "Duration : " + data.duration + " mins";
+    
     let countries = null;
     if (data.countries.length > 1) {
         countries = "Country : " + data.countries.join(", ");
     } else {
         countries = "Country : " + data.countries[0];
     }
+    
     let grossIncome = null;
     if (data.worldwide_gross_income !== null) {
         grossIncome = "Worldwide Gross Income : " + data.worldwide_gross_income.toLocaleString("en-EN", {style: "currency", currency: "USD"});
     } else {
         grossIncome = "";
     }
+    
     const description = "Description : " + data.description;
 
     let durationDateRatedContent = null;
@@ -214,20 +253,24 @@ function loadFilmData(data, modalLocation) {
 }
 
 // Récupération et affichage de la data du meilleur film selon sa note IMDb (best film)
-const bestFilmsPromise = getData(urlImdbScore);
+const bestFilmsPromise = getData(urlImdbScore7films); // METTRE LE AWAIT ICI AVANT GETDATA
 bestFilmsPromise.then(bestFilms => {
-    const sectionTitle = "best-film";
+    const sectionTitle = "best-film"; // Mettre cette partie dans une fonction createBestFilmHtml
     const sectionLocation = document.getElementById(sectionTitle);
+    
     firstFilm = bestFilms.results[0];
     firstFilmTitle = firstFilm.title;
     firstFilmUrl = firstFilm.url;
+    
     const filmTitle = createHtmlElement("h1", firstFilmTitle);
     sectionLocation.appendChild(filmTitle);
+    
     const firstFilmImage = createHtmlImg(firstFilm.image_url, firstFilm.title);
     sectionLocation.appendChild(firstFilmImage);
 
     const modalClass = ".modal-wrapper"
-    const modalLocation = document.querySelector(modalClass);
+    const modalLocation = document.querySelector(modalClass); // Mettre cette partie dans une fonction createBestFilmHtml
+    
     const firstFilmPromise = getData(firstFilmUrl);
     firstFilmPromise.then(data => {
         loadFilmData(data, modalLocation);
@@ -241,25 +284,29 @@ bestFilmsPromise.then(bestFilms => {
 Création d'un caroussel.
 Affichage de la data dans le caroussel.
 */
-const best7FilmsPromise = getData(urlImdbScore7films);
-const best7FilmsCarousel = best7FilmsPromise.then(data => carousel("best-rated-films", "best rated films", data));
+const best7FilmsPromise = getData(urlImdbScore7films); // Mutualiser avec bestFilmsPromise
+const best7FilmsCarousel = best7FilmsPromise.then(data => createCarousel("best-rated-films", "best rated films", data));
 
 // Idem pour la catégorie Crime.
 const best7FilmsCrimeCategoryPromise = getData(urlImdbScore7filmsCrimeCategory);
-const best7FilmsCrimeCategoryCarousel = best7FilmsCrimeCategoryPromise.then(data => carousel("crime-category", "crime", data));
+const best7FilmsCrimeCategoryCarousel = best7FilmsCrimeCategoryPromise.then(data => createCarousel("crime-category", "crime", data));
 
 // Idem pour la catégorie Mystery.
 const best7FilmsMysteryCategoryPromise = getData(urlImdbScore7filmsMysteryCategory);
-const best7FilmsMysteryCategoryCarousel = best7FilmsMysteryCategoryPromise.then(data => carousel("mystery-category", "mystery", data));
+const best7FilmsMysteryCategoryCarousel = best7FilmsMysteryCategoryPromise.then(data => createCarousel("mystery-category", "mystery", data));
 
 // Idem pour la catégorie Sport.
 const best7FilmsSportCategoryPromise = getData(urlImdbScore7filmsSportCategory);
-const best7FilmsSportCategoryCarousel = best7FilmsSportCategoryPromise.then(data => carousel("sport-category", "sport", data));
+const best7FilmsSportCategoryCarousel = best7FilmsSportCategoryPromise.then(data => createCarousel("sport-category", "sport", data));
 
 let modal = null;
 
-const openModal = function (event, filmUrl) {
+
+//Récupérer la data du film avant, puis passer la data directement au lieu de faire la récupératin dans la fonction openModal
+const openModal = function (event, filmUrl) { 
     event.preventDefault();
+    console.log("Event : " + event);
+    console.log("URL du film : " + filmUrl);
     modal = document.getElementById("modal");
     modal.style.display = null;
     modal.removeAttribute("aria-hidden");
@@ -303,14 +350,21 @@ window.addEventListener("keydown", function (event) {
     }
 })
 
-function openBestFilmModal() {
+async function openBestFilmModal() {
     const modalLocation = document.querySelector(".modal-wrapper");
     const bestFilmPromise = getData(urlImdbScore);
-    bestFilmPromise.then(data => {
-        const bestFilm = data.results[0];
-        const bestFilmUrl = bestFilm.url;
-        const bestFilmPromise2 = getData(bestFilmUrl);
-        bestFilmPromise2.then(data => {
+    const data = await bestFilmPromise;
+
+    const bestFilm = data.results[0];
+    const bestFilmUrl = bestFilm.url;
+    const bestFilmPromise2 = getData(bestFilmUrl);
+    const dataBestFilm = await bestFilmPromise2;
+    
+    openModal(dataBestFilm);
+
+}
+/*
+bestFilmPromise2.then(data => {
             loadFilmData(data, modalLocation);
             modal.style.display = null;
             modal.removeAttribute("aria-hidden");
@@ -319,21 +373,11 @@ function openBestFilmModal() {
             modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
             modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
         })
-        
-    });
-}
-
+*/
 
 
 const carouselWidth = 728
-const carouselElement = document.getElementsByClassName(".carousel");
-const cardElement = document.getElementsByClassName(".js-modal");
-console.log(carouselElement);
-console.log(cardElement);
-const carouselWidth2 = carouselElement.offsetWidth;
-const cardStyle = window.getComputedStyle(cardElement);
-console.log(cardStyle);
-console.log(carouselWidth2);
+
 
 
 
