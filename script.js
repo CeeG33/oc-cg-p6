@@ -165,7 +165,7 @@ function createCarousel(sectionId, carouselTitle, data) {
             carouselUl.style.transform = `translateX(${offset}px)`;
         }
     })
-    
+
 }
 /* Charge les informations d'un film et crée les balises HTML dédiées selon les paramètres suivants :
 data = Data de la film à charger.
@@ -251,6 +251,22 @@ function loadFilmData(data, modalLocation) {
     }
 }
 
+async function getBestFilmData() {
+    const bestFilmPromise = getData(urlImdbScore);
+    const data = await bestFilmPromise;
+    const bestFilm = data.results[0];
+    const bestFilmUrl = bestFilm.url;
+    const bestFilmPromise2 = getData(bestFilmUrl);
+    return bestFilmPromise2
+}
+
+async function openBestFilmModal() {
+    const modalLocation = document.querySelector(".modal-wrapper");
+    const dataBestFilm = await getBestFilmData();
+    loadFilmData(dataBestFilm, modalLocation);
+}
+
+
 // Récupération et affichage de la data du meilleur film selon sa note IMDb (best film)
 const bestFilmsPromise = getData(urlImdbScore7films); // METTRE LE AWAIT ICI AVANT GETDATA
 bestFilmsPromise.then(bestFilms => {
@@ -275,10 +291,10 @@ bestFilmsPromise.then(bestFilms => {
         loadFilmData(data, modalLocation);
            
     });
-    
-    
+           
 });
-
+    
+    
 /* Récupération de la data des 7 meilleurs films selon leur note IMDb (best rated films).
 Création d'un caroussel.
 Affichage de la data dans le caroussel.
@@ -302,7 +318,7 @@ let modal = null;
 
 
 //Récupérer la data du film avant, puis passer la data directement au lieu de faire la récupératin dans la fonction openModal
-const openModal = function (event, filmUrl) { 
+const openModal = async function (event, filmUrl) { 
     event.preventDefault();
     console.log("Event : " + event);
     console.log("URL du film : " + filmUrl);
@@ -315,11 +331,12 @@ const openModal = function (event, filmUrl) {
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
     if (filmUrl === undefined) return;
     const filmDataPromise = getData(filmUrl);
-    filmDataPromise.then(data => {
-        loadFilmData(data, document.querySelector(".modal-wrapper"));
-        });
+    const data = await filmDataPromise
+    loadFilmData(data, document.querySelector(".modal-wrapper"));
+
 }
 
+// Fermeture de la modale.
 const closeModal = function (event) {
     if (modal === null) return;
     event.preventDefault();
@@ -335,143 +352,20 @@ const closeModal = function (event) {
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation);
 }
 
+// Stoppe la propagation du clique en dehors de la modale.
 const stopPropagation = function (event) {
     event.stopPropagation()
 }
 
+// Attribue la fonction d'ouverture de la modale à chaque balise ayant la classe .js-modal
 document.querySelectorAll(".js-modal").forEach(link => {
     link.addEventListener("click", openModal);
 })
 
+// Prise en compte du bouton échap pour la fermeture de la modale.
 window.addEventListener("keydown", function (event) {
     if (event.key === "Escape" || event.key === "Esc") {
         closeModal(event);
     }
 })
 
-async function openBestFilmModal() {
-    const modalLocation = document.querySelector(".modal-wrapper");
-    const bestFilmPromise = getData(urlImdbScore);
-    const data = await bestFilmPromise;
-
-    const bestFilm = data.results[0];
-    const bestFilmUrl = bestFilm.url;
-    const bestFilmPromise2 = getData(bestFilmUrl);
-    const dataBestFilm = await bestFilmPromise2;
-    
-    openModal(dataBestFilm);
-
-}
-/*
-bestFilmPromise2.then(data => {
-            loadFilmData(data, modalLocation);
-            modal.style.display = null;
-            modal.removeAttribute("aria-hidden");
-            modal.setAttribute("aria-modal", "true");
-            modal.addEventListener("click", closeModal);
-            modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
-            modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation);
-        })
-*/
-
-
-const carouselWidth = 728
-
-
-
-
-/*
-
-
-
-const best7FilmsPromise = getData(urlImdbScore7films);
-best7FilmsPromise.then(best7Films => {
-    const sectionTitle = "best-rated-films";
-    const sectionLocation = document.getElementById(sectionTitle);
-    const bestFilmsH1Text = "Films les mieux notés";
-    const allFilms = best7Films.results;
-    const h1 = createHtmlElement("h1", bestFilmsH1Text);
-    sectionLocation.appendChild(h1);
-    const buttonDiv = createHtmlElement("div", "", "button-carousel");
-    sectionLocation.appendChild(buttonDiv);
-    const buttonL = createHtmlElementWithDataAction("button", "L", "slideLeft");
-    buttonDiv.appendChild(buttonL);
-    const buttonR = createHtmlElementWithDataAction("button", "R", "slideRight");
-    buttonDiv.appendChild(buttonR);
-    const carouselUl = createHtmlElementWithDataTarget("ul", "", "carousel", "carousel");
-    sectionLocation.appendChild(carouselUl);
-    console.log(allFilms);
-    for (let film of allFilms) {
-        const filmCard = createHtmlElementWithDataTarget("li", "", "card", "card");
-        const filmImg = createHtmlImg(film.image_url, film.title);
-        filmCard.appendChild(filmImg);
-        carouselUl.appendChild(filmCard);
-    }
-});
-
-
-async function main() {
-    const bestFilmsData = await getData(urlImdbScore);
-    console.log(bestFilmsData);
-
-    const firstRankedFilm = bestFilmsData.results[0];
-    console.log(firstRankedFilm);
-
-    const firstRankedFilmTitle = firstRankedFilm.title;
-    console.log(firstRankedFilmTitle);
-}
-
-main();
-
-
-// Envoi de la requête à l'API pour obtenir le meilleur film selon son score IMDb
-fetch(url_imdb_score)
-    .then(response => response.json())
-    .then(data => {
-        const first_film = data.results[0]
-        console.log(first_film);
-        console.log(first_film.title);
-
-        const best_film = document.getElementById("best-film");
-        const best_film_h1 = document.createElement("h1");
-        best_film_h1.textContent = first_film.title;
-        best_film.appendChild(best_film_h1);
-        const best_film_img = document.createElement("img");
-        best_film_img.src = first_film.image_url;
-        best_film_img.alt = first_film.title + " Cover image";
-        best_film.appendChild(best_film_img);
-    })
-
-    .catch(error => {
-        console.error("Une erreur s'est produite !! >>", error);
-    });
-
-// Création du caroussel
-const carousel = document.querySelector("[data-target='carousel']");
-const card = carousel.querySelector("[data-target='card']");
-const leftButton = document.querySelector("[data-target='slideLeft']");
-const rightButton = document.querySelector("[data-target='slideRight']");
-
-const carouselWidth = carousel.offsetWitdh;
-const cardStyle = card.currentStyle || window.getComputedStyle(card);
-const cardMarginRight = Number(cardStyle.marginRight.match(/\d+/g)[0]);
-
-const cardCount = carousel.querySelectorAll("[data-target='card']").length;
-
-let offset = 0;
-const maxX = -((cardCount / 4) * carouselWidth + (cardMarginRight * (cardCount / 4)) - carouselWidth - cardMarginRight);
-
-leftButton.addEventListener("click", function() {
-    if (offset !== 0) {
-        offset += carouselWidth + cardMarginRight;
-        carousel.style.transform = 'translateX(${offset}px)';
-    }
-})
-
-leftButton.addEventListener("click", function() {
-    if (offset !== 0) {
-        offset -= carouselWidth + cardMarginRight;
-        carousel.style.transform = 'translateX(${offset}px)';
-    }
-})
-*/
