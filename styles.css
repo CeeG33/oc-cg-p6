@@ -150,7 +150,7 @@ footer ul {
     align-items: center;
     width: 600px;
     max-width: calc(100vw - 20px);
-    max-height: calc(100vh -20px);
+    max-height: calc(100vh - 20px);
     padding: 20px;
     background-color: #1F2833;
     animation: slideFromTop .5s both .1s;
