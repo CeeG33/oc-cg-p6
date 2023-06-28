@@ -147,8 +147,7 @@ function createCarousel(sectionId, carouselTitle, data) {
         cardMarginRight = Number(cardStyle.marginRight.match(/\d+/g)[0]);
         
     }
-    const cardCount = carouselUl.querySelectorAll("[data-target='card']").length;
-
+    
     let offset = 0;
     const maxX = -728;
     console.log(maxX);
