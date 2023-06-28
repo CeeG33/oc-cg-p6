@@ -1,8 +1,9 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Tahoma;
+    font-family: Trebuchet MS;
     background-color: #1F2833;
+    
 }
 
 /* --- HEADER --- */
@@ -11,21 +12,29 @@ nav {
     list-style-type: none;
     width: auto;
     color: #66FCF1;
-    margin: 20px auto;
+    margin: 40px auto;
+    margin-top: 0;
+    padding-top: 20px;
     position: relative;
     left: 0;
     right: 0;
     justify-content: space-evenly;
     align-items: center;
+    background-image: linear-gradient(to bottom, black, #1F2833);
 }
 
 nav ul {
     display: flex;
     justify-content: center;
+    
 }
 
 nav li {
     margin: 0 20px;
+    border: 1px solid #66FCF1;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 5px #66FCF1;
 }
 
 nav img {
@@ -48,18 +57,24 @@ section#best-film a {
     padding-left: 12px;
     border: 2px solid #66FCF1;
     border-radius: 50%;
+    position: absolute;
+    top: 180px;
+    left: 40px;
+    background-color: #1F283390;
+    box-shadow: 0 0 6px 3px #66FCF1;
 }
 
 section#best-film {
-    padding-top: 20px;
-    height: 320px;
+    height: 300px;
     margin-bottom: 20px;
     position: relative;
+    box-shadow: 0 0 20px 5px #66FCF1;
 }
 
 section#best-film img {
     width: 728px;
     height: 300px;
+    
 }
 
 section#best-film h1 {
@@ -67,15 +82,9 @@ section#best-film h1 {
     top: 80px;
     left: 20px;
     font-size: 40px;
-    background-color: #1F283390;
+    background-color: #1F283399;
 }
 
-section#best-film a {
-    position: absolute;
-    top: 180px;
-    left: 40px;
-    background-color: #1F283390;
-}
 
 /* --- ALL H1 --- */
 h1 {
@@ -90,9 +99,10 @@ footer img {
 
 footer {
     display: flex;
-    margin: 40px 20px 20px 20px;
+    margin-top: 20px;
+    padding-bottom: 20px;
     justify-content: space-evenly;
-
+    background-image: linear-gradient(to bottom, #1F2833, black);
 }
 
 footer h1 {
@@ -106,7 +116,6 @@ footer ul {
     font-size: 15px;
 
 }
-
 
 * { box-sizing: border-box; }
 
@@ -146,16 +155,14 @@ footer ul {
     background-color: #1F2833;
     animation: slideFromTop .5s both .1s;
     position: fixed;
+    color: #C5C6C7;
+    font-size: small;
+    box-shadow: 0 0 20px 5px #66FCF1;
 }
 
 .modal-wrapper h1 {
     font-size: 220%;
     color: #C5C6C7;
-}
-
-.modal-wrapper {
-    color: #C5C6C7;
-    font-size: small;
 }
 
 .modal-wrapper p {
@@ -165,6 +172,7 @@ footer ul {
 .modal-wrapper img {
     width: 50%;
     height: auto;
+    box-shadow: 0 0 20px 5px #66FCF1;
 }
 
 .modal[aria-hidden="true"] {
@@ -205,6 +213,7 @@ div.modal-wrapper button {
     cursor: pointer;
     border: 2px solid #66FCF1;
     border-radius: 50%;
+    box-shadow: 0 0 10px 2px #66FCF1;
 }
 
 /* --- SLIDESHOW CONTAINER --- */
@@ -217,6 +226,11 @@ section {
     
 }
 
+section h1 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
 /* --- SLIDESHOW BUTTONS --- */
 .button-carousel {
     width: 100%;
@@ -225,7 +239,7 @@ section {
     justify-content: space-between;
     align-items: center;
     position: absolute;
-    
+    box-shadow: 0 0 5px 3px #66FCF1;
 }
 
 .button-carousel button[data-action="slideLeft"],
@@ -238,7 +252,7 @@ section {
     border: 1px solid #66FCF1;
     border-radius: 50%;
     z-index: 1;
-    
+    box-shadow: 0 0 6px 1px #66FCF1;
 }
 
 /* --- SLIDESHOW --- */
