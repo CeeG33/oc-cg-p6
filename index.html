@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Bienvenue sur JustStreamIt !</title>
         <link rel="stylesheet" href="styles.css">
-        <script src="script.js" defer></script>
+        <script src="script/script.js" type="module" defer></script>
 </head>
 
     <body>
@@ -16,7 +16,7 @@
             </ul>
         </nav>
 
-        <aside id="modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
+        <aside id="modal" class="modal" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
             <div class="modal-wrapper js-modal-stop">
                 <button class="js-modal-close">X</button>
                 <img src="" alt="">
@@ -30,21 +30,15 @@
             </div>
         </aside>
 
-        <section id="best-film">
-            <a href="#modal" class="js-modal" onclick="openBestFilmModal()">►</a>
-        </section>
+        <section id="best-film"></section>
         
-        <section id="best-rated-films">
-        </section>
+        <section id="best-rated-films"></section>
 
-        <section id="crime-category">
-        </section>
+        <section id="crime-category"></section>
 
-        <section id="mystery-category">
-        </section>
+        <section id="mystery-category"></section>
 
-        <section id="sport-category">
-        </section>
+        <section id="sport-category"></section>
 
         
 
