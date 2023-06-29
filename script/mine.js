@@ -104,16 +104,20 @@ function createCarousel(filmCategory) {
     
     const carousel = createHtmlElementWithDataTarget("div", null, "carousel", "carousel");
 
-    sectionLocation.appendChild(carousel);
+    const carouselContainer = createHtmlElement("div", null, "carousel-container");
 
-    const carouselWidth = carousel.offsetWidth;
+    sectionLocation.appendChild(carouselContainer)
+
+    carouselContainer.appendChild(carousel);
+
+    const carouselWidth = carouselContainer.offsetWidth;
     
     let cardStyle;
     let cardMarginRight;
 
     for (let film of dataDetails) {
         const filmUrl = film.url;
-        const filmCard = createHtmlElementWithDataTarget("article", null, "card", "js-modal");
+        const filmCard = createHtmlElementWithDataTarget("article", null, "card", "card");
         
         filmCard.addEventListener("click", () => handleModal(filmUrl));
 

@@ -68,7 +68,7 @@ section#best-film button {
 
 section#best-film {
     height: 300px;
-    margin-bottom: 20px;
+    margin-bottom: 45px;
     position: relative;
     box-shadow: 0 0 20px 5px #66FCF1;
 }
@@ -220,11 +220,10 @@ div.modal-wrapper button {
 
 /* --- SLIDESHOW CONTAINER --- */
 section {
-    height: 350px;
+    height: 320px;
     width: 728px;
     position: relative;
     margin: 0 auto;
-    overflow: hidden;
     
 }
 
@@ -236,7 +235,7 @@ section h1 {
 /* --- SLIDESHOW BUTTONS --- */
 .button-carousel {
     width: 100%;
-    height: 271px;
+    height: 268px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -270,15 +269,25 @@ section h1 {
     
 }
 
+.carousel-container {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    left: 0;
+    height: 268px;
+    overflow: hidden;
+}
+
 .carousel article {
     cursor: pointer;
 }
 
 .card {
-    min-width: 200px;
-    height: 200px;
-    margin-right: 1rem;
+    margin: 0;
     display: inline-block;
-    
+    height: 268px;
 }
 
