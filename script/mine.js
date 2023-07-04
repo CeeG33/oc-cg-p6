@@ -133,18 +133,18 @@ function createCarousel(filmCategory) {
     }
     
     let offset = 0;
-    const maxX = -728;
-    
+    const maxX = -546;
+
     buttonL.addEventListener("click", function() {
         if (offset !== 0) {
-            offset += carouselWidth + cardMarginRight;
+            offset += 182 + cardMarginRight;
             carousel.style.transform = `translateX(${offset}px)`;
         }
     })
 
     buttonR.addEventListener("click", function() {
         if (offset !== maxX) {
-            offset -= carouselWidth + cardMarginRight;
+            offset -= 182 + cardMarginRight;
             carousel.style.transform = `translateX(${offset}px)`;
         }
     })
